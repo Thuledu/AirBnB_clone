@@ -1,5 +1,8 @@
 #!/usr/bin/python3
+"""Defines the HBnB console."""
 import cmd
+from models import storage
+from models.base_model import BaseModel
 
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
