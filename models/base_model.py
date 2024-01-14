@@ -1,35 +1,26 @@
 #!/usr/bin/python3
 """Defines the BaseModel class."""
 import models
+import uuid
 from models import storage
 from uuid import uuid4
 from datetime import datetime
 
 class BaseModel:
-    """
-    BaseModel class that defines common attributes/methods for other classes.
-    """
-
+    """Base class for other classes to inherit"""
     def __init__(self, *args, **kwargs):
-        """
-        Initializes a new instance of BaseModel with unique id and creation/update timestamps.
-        
-        Args:
-            *args: Unused positional arguments.
-            **kwargs: Keyword arguments to initialize the instance attributes.
-        """
-        tform = "%Y-%m-%dT%H:%M:%S.%f"
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        """Initialization of BaseModel instance"""
         if kwargs:
             for k, v in kwargs.items():
-                if k in ["created_at", "updated_at"]:
-                    self.__dict__[k] = datetime.strptime(v, tform)
-                else:
-                    self.__dict__[k] = v
-                else:
-                    models.storage.new(self)
+                if k != "__class__":
+                    if k == "created_at" or k == "updated_at":
+                        setattr(self, k, datetime.strptime(v, "%Y-%m-%dT%H:%M:%S.%f"))
+                    else:
+                        setattr(self, k, v)
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = self.updated_at = datetime.now()
+            models.storage.new(self)
 
 
     def __str__(self):
