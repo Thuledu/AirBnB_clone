@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """Defines the Place class."""
-from pydantic import BaseModel
 from typing import List
 from models.base_model import BaseModel
 

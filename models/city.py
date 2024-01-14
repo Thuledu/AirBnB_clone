@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """Defines the City class."""
-from pydantic import BaseModel
 from models.base_model import BaseModel
 
 class City(BaseModel):
