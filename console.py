@@ -15,6 +15,15 @@ from models import storage
 
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
+    __classes = {
+        "BaseModel",
+        "User",
+        "State",
+        "City",
+        "Place",
+        "Amenity",
+        "Review"
+    }
 
     def do_create(self, arg):
         """Creates a new instance of a specified class and saves it to the JSON file"""
@@ -106,12 +115,115 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** no instance found **")
 
+    def do_count(self, arg):
+        """Retrieves the number of instances of a class"""
+        class_name = arg.split()[0]
+        all_instances = storage.all()
+        count = sum(1 for key in all_instances if class_name in key)
+        print(count)
+
+    def do_show_id(self, arg):
+        """Retrieves an instance based on its ID"""
+        args = arg.split()
+        if len(args) < 1:
+            print("** class name missing **")
+            return
+        if args[0] not
+        in ["BaseModel", "User", "State", "City", "Amenity", "Place", "Review"]:
+            if len(args) < 2:
+                print("** instance id missing **")
+                return
+            key = args[1]
+            all_instances = storage.all()
+            for k, v in all_instances.items():
+                if k.split('.')[1] == key and k.split('.')[0] == args[0]:
+                    print(v)
+                    return
+            print("** no instance found **")
+
+    def do_destroy_id(self, arg):
+        """Destroys an instance based on its ID"""
+        args = arg.split()
+        if len(args) < 1:
+            print("** class name missing **")
+            return
+        if args[0] not in ["BaseModel", "User", "State", "City", "Amenity", "Place", "Review"]:
+            print("** class doesn't exist **")
+            return
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+        key = args[0] + "." + args[1]
+        all_instances = storage.all()
+        if key in all_instances:
+            del all_instances[key]
+            storage.save()
+        else:
+            print("** no instance found **")
+
+    def do_update_id(self, arg):
+        """Updates an instance based on its ID with attribute name and value"""
+        args = arg.split()
+        if len(args) < 1:
+            print("** class name missing **")
+            return
+        if args[0] not in ["BaseModel", "User", "State", "City", "Amenity", "Place", "Review"]:
+            print("** class doesn't exist **")
+            return
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+        if len(args) < 3:
+            print("** attribute name missing **")
+            return
+        if len(args) < 4:
+            print("** value missing **")
+            return
+        key = args[0] + "." + args[1]
+        all_instances = storage.all()
+        if key in all_instances:
+            setattr(all_instances[key], args[2], args[3])
+            storage.save()
+        else:
+            print("** no instance found **")
+
+    def do_update_dict(self, arg):
+        """Updates an instance based on its ID with a dictionary representation"""
+        args = arg.split()
+        if len(args) < 1:
+            print("** class name missing **")
+            return
+        if args[0] not in ["BaseModel", "User", "State", "City", "Amenity", "Place", "Review"]:
+            print("** class doesn't exist **")
+            return
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+        if len(args) < 3:
+            print("** dictionary missing **")
+            return
+        key = args[0] + "." + args[1]
+        all_instances = storage.all()
+        if key in all_instances:
+            obj = all_instances[key]
+            if len(args) >= 3:
+                try:
+                    dictionary = eval(args[2])
+                    for k, v in dictionary.items():
+                        setattr(obj, k, v)
+                    storage.save()
+                except:
+                    pass
+        else:
+            print("** no instance found **")
+
     def emptyline(self):
         """Do nothing on empty input line"""
         pass
 
     def do_EOF(self, arg):
         """Exit the program"""
+        print("")
         return True
 
     def do_quit(self, arg):
