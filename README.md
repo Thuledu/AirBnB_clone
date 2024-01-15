@@ -25,6 +25,7 @@ Do you remember the Shell? It’s exactly the same but limited to a specific use
 
 ## Execution
 The shell should work like this in interactive mode:
+```
 $ ./console.py
 (hbnb) help
 
@@ -36,30 +37,26 @@ EOF  help  quit
 (hbnb) 
 (hbnb) quit
 $
+```
 
 But also in non-interactive mode: (like the Shell project in C)
+```
 $ echo "help" | ./console.py
-(hbnb)
-
+(hbnb) 
 Documented commands (type help <topic>):
 ========================================
-EOF  help  quit
-(hbnb) 
-$
-$ cat test_help
-help
-$
-$ cat test_help | ./console.py
-(hbnb)
+EOF  all  count  create  destroy  help  quit  show  update
 
-Documented commands (type help <topic>):
-========================================
-EOF  help  quit
 (hbnb) 
 $
+```
 
 All tests should also pass in non-interactive mode: 
+```
 $ echo "python3 -m unittest discover tests" | bash
+```
 
 Alternatively, you can specify a single test file to run at a time:
+```
 $ python3 unittest -m tests/test_console.py
+```
