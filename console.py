@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """Defines the HBnB console."""
 import cmd
-import json
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State
@@ -9,6 +8,32 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
+import re
+from shlex import split
+from models import storage
+
+def parse(arg):
+    curly_braces = re.findall(r"{(.*?)}", arg)
+    brackets = re.findall(r"\[(.*?)\]", arg)
+    
+    if not curly_braces and not brackets:
+        return [i.strip(",") for i in arg.split()]
+    else:
+        tokens = []
+        start = 0
+        for match in re.finditer(r"[\[\{]", arg):
+            tokens.extend([i.strip(",") for i in arg[start:match.start()].split()])
+            start = match.end()
+            if match.group() == '[':
+                end = arg.find(']', start)
+                tokens.append(arg[start:end+1])
+                start = end + 1
+            else:
+                end = arg.find('}', start)
+                tokens.append(arg[start:end+1])
+                start = end + 1
+        tokens.extend([i.strip(",") for i in arg[start:].split()])
+        return tokens
 
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
@@ -21,6 +46,16 @@ class HBNBCommand(cmd.Cmd):
         "Amenity",
         "Review"
     }
+
+    def default(self, arg):
+        """Default behavior for cmd when input is invalid"""
+        argdict = {
+            "all": self.do_all,
+            "show": self.do_show,
+            "destroy": self.do_destroy,
+            "count": self.do_count,
+            "update": self.do_update
+            }
 
     def do_create(self, arg):
         """Creates a new instance of a specified class and saves it to the JSON file"""
