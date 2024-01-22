@@ -1,0 +1,28 @@
+/* Default styles for mobile */
+.container {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* Styles for larger screens using media query */
+@media (min-width: 768px) {
+    .container {
+        width: 80%;
+        margin: 0 auto;
+    }
+    .filters {
+        display: flex;
+        justify-content: space-between;
+    }
+    .places {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .places article {
+        width: 48%; /* Two articles per row */
+        margin-bottom: 20px;
+    }
+}
+
